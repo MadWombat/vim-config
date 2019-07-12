@@ -18,18 +18,19 @@ Plug 'tpope/vim-commentary' " easy comments
 Plug 'tpope/vim-fugitive'   " awesome Git integration
 Plug 'tpope/vim-surround'   " easy quotes/brackets
 Plug 'tpope/vim-rsi'        " readline mappings in insert mode
+
 " general IDE shit
 Plug 'ctrlpvim/ctrlp.vim'
 Plug 'Konfekt/FastFold'                                       " cached folding
-Plug 'neomake/neomake'                                        " async lint and make
-Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' } " async completion
-Plug 'w0rp/ale'                                               " linter for multiple languages
 Plug 'scrooloose/nerdtree'                                    " navigation tree
 Plug 'Xuyuanp/nerdtree-git-plugin'                            " nerdtree git support
 Plug 'vim-airline/vim-airline'                                " better status line
 Plug 'vim-airline/vim-airline-themes'                         " themes for airline
 Plug 'Valloric/ListToggle'                                    " quick open/close of list windows
-" python 
+Plug 'autozimu/LanguageClient-neovim', { 'branch': 'next', 'do': 'bash install.sh', }
+Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
+
+" python
 Plug 'python-mode/python-mode', { 'for': 'python'}
 " other languages support
 Plug 'pangloss/vim-javascript'
@@ -45,12 +46,13 @@ Plug 'cespare/vim-toml'
 Plug 'hashivim/vim-terraform'
 Plug 'farfanoide/vim-kivy'
 Plug 'neovimhaskell/haskell-vim'
-Plug 'autozimu/LanguageClient-neovim', {'branch': 'next', 'do': 'bash install.sh',}
 Plug 'beyondmarc/glsl.vim'
 Plug 'elixir-editors/vim-elixir'
 Plug 'slashmili/alchemist.vim'
 Plug 'udalov/kotlin-vim'
 Plug 'lifepillar/pgsql.vim'
+Plug 'martinda/Jenkinsfile-vim-syntax'
+Plug 'bfrg/vim-cpp-modern'
 " misc
 Plug 'chr4/nginx.vim'
 Plug 'junegunn/vim-easy-align'
@@ -77,6 +79,9 @@ if has("gui_macvim")
 endif
 
 set laststatus=2
+
+set exrc
+set secure
 
 set ttyfast
 set lazyredraw
@@ -119,12 +124,19 @@ let g:airline#extensions#ale#enabled = 1
 let g:airline_powerline_fonts=1
 
 " language client
+let g:LanguageClient_useVirtualText = 0
 let g:LanguageClient_serverCommands = {
-    \ 'haskell': ['hie', '--lsp'], 
+    \ 'haskell': ['hie', '--lsp'],
     \ 'python': ['pyls'],
+    \ 'c': ['ccls',
+        \ '--log-file=/tmp/ccls.log', 
+        \ '-init={"clang":{"extraArgs":["-std=c++17", "-isystem", "/Library/Developer/CommandLineTools/usr/include/c++/v1"]}}'],
+    \ 'cpp': ['ccls',
+        \ '--log-file=/tmp/ccls.log', 
+        \ '-init={"clang":{"extraArgs":["-std=c++17", "-isystem", "/Library/Developer/CommandLineTools/usr/include/c++/v1"]}}'],
     \ }
 
-" deoplete completion
+" deoplete
 let g:deoplete#enable_at_startup = 1
 let g:deoplete_disable_auto_complete=1
 call deoplete#custom#buffer_option('auto_complete', v:false)
@@ -138,14 +150,6 @@ let g:deoplete#sources.python3 = ['LanguageClient']
 let g:deoplete#sources.rust = ['LanguageClient']
 let g:deoplete#sources.c = ['LanguageClient']
 let g:deoplete#sources.vim = ['vim']
-
-" ale linting
-let g:ale_sign_column_always = 0
-let g:ale_emit_conflict_warnings = 0
-let g:ale_lint_on_text_changed = 'never'
-let g:ale_set_loclist = 0
-let g:ale_set_quickfix = 1
-let g:ale_linters = {'python': ['pyls', ], 'go': ['gofmt', 'govet']}
 
 " file browsing
 let g:netrw_liststyle = 3
