@@ -27,7 +27,8 @@ Plug 'Xuyuanp/nerdtree-git-plugin'                            " nerdtree git sup
 Plug 'vim-airline/vim-airline'                                " better status line
 Plug 'vim-airline/vim-airline-themes'                         " themes for airline
 Plug 'Valloric/ListToggle'                                    " quick open/close of list windows
-Plug 'autozimu/LanguageClient-neovim', { 'branch': 'next', 'do': 'bash install.sh', }
+"Plug 'autozimu/LanguageClient-neovim', { 'branch': 'next', 'do': 'bash install.sh', }
+Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
 
 " python
