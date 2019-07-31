@@ -1,10 +1,17 @@
 " this is required by everything
 set nocompatible
+" do this first, so colors in plug don't get screwed up
+syntax on
 
 " install vim-plug if not already there
-if empty(glob("~/.config/nvim/autoload/plug.vim"))
-    execute '!curl -fLo ~/.config/nvim/autoload/plug.vim https://raw.github.com/junegunn/vim-plug/master/plug.vim'
+let plug_install = 0
+let autoload_plug_path = stdpath('config') . '/autoload/plug.vim'
+if !filereadable(autoload_plug_path)
+    silent exe '!curl -fL --create-dirs -o ' . autoload_plug_path . ' https://raw.github.com/junegunn/vim-plug/master/plug.vim'
+    execute 'source ' . fnameescape(autoload_plug_path)
+    let plug_install = 1
 endif
+unlet autoload_plug_path
 
 "
 " vim plugins
@@ -26,11 +33,7 @@ Plug 'scrooloose/nerdtree'                                    " navigation tree
 Plug 'Xuyuanp/nerdtree-git-plugin'                            " nerdtree git support
 Plug 'vim-airline/vim-airline'                                " better status line
 Plug 'vim-airline/vim-airline-themes'                         " themes for airline
-Plug 'Valloric/ListToggle'                                    " quick open/close of list windows
-" Plug 'autozimu/LanguageClient-neovim', { 'branch': 'next', 'do': 'bash install.sh', }
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
-" Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
-
 " python
 Plug 'python-mode/python-mode', { 'for': 'python'}
 " other languages support
@@ -67,10 +70,14 @@ Plug 'flazz/vim-colorschemes'
 
 call plug#end()
 
+if plug_install
+    PlugInstall --sync
+endif
+unlet plug_install
+
 "
 " global settings
 "
-syntax on
 set background=dark
 colorscheme badwolf
 
@@ -101,8 +108,6 @@ set tabstop=4
 set shiftwidth=4
 set softtabstop=4
 
-set fileformat=unix
-
 " never autowrap text and set textwidth to a reasonable number
 set wrapmargin=0
 set textwidth=150
@@ -125,33 +130,10 @@ let g:airline_theme='badwolf'
 let g:airline#extensions#ale#enabled = 1
 let g:airline_powerline_fonts=1
 
-" language client
-" let g:LanguageClient_useVirtualText = 0
-" let g:LanguageClient_serverCommands = {
-"     \ 'haskell': ['hie', '--lsp'],
-"     \ 'python': ['pyls', '--log-file', '/tmp/pyls.log'],
-"     \ 'c': ['ccls',
-"         \ '--log-file=/tmp/ccls.log',
-"         \ '-init={"clang":{"extraArgs":["-std=c++17", "-isystem", "/Library/Developer/CommandLineTools/usr/include/c++/v1"]}}'],
-"     \ 'cpp': ['ccls',
-"         \ '--log-file=/tmp/ccls.log', 
-"         \ '-init={"clang":{"extraArgs":["-std=c++17", "-isystem", "/Library/Developer/CommandLineTools/usr/include/c++/v1"]}}'],
-"     \ }
-
-" deoplete
-" let g:deoplete#enable_at_startup = 1
-" let g:deoplete_disable_auto_complete=1
-" call deoplete#custom#buffer_option('auto_complete', v:false)
-" autocmd InsertLeave,CompleteDone * if pumvisible() == 0 | pclose | endif
-" inoremap <expr><tab> pumvisible() ? "\<c-n>" : "\<tab>"
-
-" let g:deoplete#sources = {}
-" let g:deoplete#sources.cpp = ['LanguageClient']
-" let g:deoplete#sources.python = ['LanguageClient']
-" let g:deoplete#sources.python3 = ['LanguageClient']
-" let g:deoplete#sources.rust = ['LanguageClient']
-" let g:deoplete#sources.c = ['LanguageClient']
-" let g:deoplete#sources.vim = ['vim']
+" disable python2 support
+let g:loaded_python_provider = 1
+let g:python_host_prog = '/Users/dmitriy.kropivnitski/.pyenv/versions/neovim2/bin/python2'
+let g:python3_host_prog = '/Users/dmitriy.kropivnitski/.pyenv/versions/3.6.8/bin/python3'
 
 " file browsing
 let g:netrw_liststyle = 3
@@ -165,9 +147,8 @@ map <F2> :NERDTreeToggle<CR>
 nmap ga <Plug>(EasyAlign)
 xmap ga <Plug>(EasyAlign)
 
-" quickfix and location toggle
-let g:lt_location_list_toggle_map = '<leader>l'
-let g:lt_quickfix_list_toggle_map = '<leader>q'
+" location list toggle
+nnoremap <leader>l :CocList diagnostics<CR>
 
 " session settings
 let g:session_autosave = 'no'
@@ -213,6 +194,9 @@ au FileType python let g:pymode_rope_enable_autoimport=0
 au FileType python let g:pymode_rope_autoimport_generate=0
 au FileType python let g:pymode_rope_guess_project=0
 au FileType python let g:pymode_doc=0
+au FileType python let g:pymode_run=0
+au FileType python let b:coc_root_patterns = ['.git', '.env']
+au FileType python nnoremap <leader>r :CocCommand python.runLinting
 
 " haskell
 au FileType haskell let g:haskell_enable_quantification = 1
