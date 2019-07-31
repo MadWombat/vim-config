@@ -27,9 +27,9 @@ Plug 'Xuyuanp/nerdtree-git-plugin'                            " nerdtree git sup
 Plug 'vim-airline/vim-airline'                                " better status line
 Plug 'vim-airline/vim-airline-themes'                         " themes for airline
 Plug 'Valloric/ListToggle'                                    " quick open/close of list windows
-"Plug 'autozimu/LanguageClient-neovim', { 'branch': 'next', 'do': 'bash install.sh', }
+" Plug 'autozimu/LanguageClient-neovim', { 'branch': 'next', 'do': 'bash install.sh', }
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
-Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
+" Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
 
 " python
 Plug 'python-mode/python-mode', { 'for': 'python'}
@@ -54,6 +54,7 @@ Plug 'udalov/kotlin-vim'
 Plug 'lifepillar/pgsql.vim'
 Plug 'martinda/Jenkinsfile-vim-syntax'
 Plug 'bfrg/vim-cpp-modern'
+Plug 'dart-lang/dart-vim-plugin'
 " misc
 Plug 'chr4/nginx.vim'
 Plug 'junegunn/vim-easy-align'
@@ -125,32 +126,32 @@ let g:airline#extensions#ale#enabled = 1
 let g:airline_powerline_fonts=1
 
 " language client
-let g:LanguageClient_useVirtualText = 0
-let g:LanguageClient_serverCommands = {
-    \ 'haskell': ['hie', '--lsp'],
-    \ 'python': ['pyls'],
-    \ 'c': ['ccls',
-        \ '--log-file=/tmp/ccls.log', 
-        \ '-init={"clang":{"extraArgs":["-std=c++17", "-isystem", "/Library/Developer/CommandLineTools/usr/include/c++/v1"]}}'],
-    \ 'cpp': ['ccls',
-        \ '--log-file=/tmp/ccls.log', 
-        \ '-init={"clang":{"extraArgs":["-std=c++17", "-isystem", "/Library/Developer/CommandLineTools/usr/include/c++/v1"]}}'],
-    \ }
+" let g:LanguageClient_useVirtualText = 0
+" let g:LanguageClient_serverCommands = {
+"     \ 'haskell': ['hie', '--lsp'],
+"     \ 'python': ['pyls', '--log-file', '/tmp/pyls.log'],
+"     \ 'c': ['ccls',
+"         \ '--log-file=/tmp/ccls.log',
+"         \ '-init={"clang":{"extraArgs":["-std=c++17", "-isystem", "/Library/Developer/CommandLineTools/usr/include/c++/v1"]}}'],
+"     \ 'cpp': ['ccls',
+"         \ '--log-file=/tmp/ccls.log', 
+"         \ '-init={"clang":{"extraArgs":["-std=c++17", "-isystem", "/Library/Developer/CommandLineTools/usr/include/c++/v1"]}}'],
+"     \ }
 
 " deoplete
-let g:deoplete#enable_at_startup = 1
-let g:deoplete_disable_auto_complete=1
-call deoplete#custom#buffer_option('auto_complete', v:false)
-autocmd InsertLeave,CompleteDone * if pumvisible() == 0 | pclose | endif
-inoremap <expr><tab> pumvisible() ? "\<c-n>" : "\<tab>"
+" let g:deoplete#enable_at_startup = 1
+" let g:deoplete_disable_auto_complete=1
+" call deoplete#custom#buffer_option('auto_complete', v:false)
+" autocmd InsertLeave,CompleteDone * if pumvisible() == 0 | pclose | endif
+" inoremap <expr><tab> pumvisible() ? "\<c-n>" : "\<tab>"
 
-let g:deoplete#sources = {}
-let g:deoplete#sources.cpp = ['LanguageClient']
-let g:deoplete#sources.python = ['LanguageClient']
-let g:deoplete#sources.python3 = ['LanguageClient']
-let g:deoplete#sources.rust = ['LanguageClient']
-let g:deoplete#sources.c = ['LanguageClient']
-let g:deoplete#sources.vim = ['vim']
+" let g:deoplete#sources = {}
+" let g:deoplete#sources.cpp = ['LanguageClient']
+" let g:deoplete#sources.python = ['LanguageClient']
+" let g:deoplete#sources.python3 = ['LanguageClient']
+" let g:deoplete#sources.rust = ['LanguageClient']
+" let g:deoplete#sources.c = ['LanguageClient']
+" let g:deoplete#sources.vim = ['vim']
 
 " file browsing
 let g:netrw_liststyle = 3
